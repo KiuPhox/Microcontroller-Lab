@@ -93,6 +93,12 @@ int main(void)
 	void clearNumberOnClock(int num){
 		HAL_GPIO_WritePin(GPIOA, GPIO_Pins[num - 1], GPIO_PIN_SET);
 	}
+
+	int hour = 10;
+	int minute = 50;
+	int second = 46;
+	int isInit = 0;
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -121,7 +127,49 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  HAL_Delay(1000);
+	  if (isInit == 0){
+		  clearAllClock();
+		  isInit = 1;
+	  }
+
+	  clearNumberOnClock(hour);
+	  if (minute / 5 == 0)
+		  clearNumberOnClock(12);
+	  else
+		  clearNumberOnClock(minute / 5);
+
+	  if (second / 5 == 0)
+		  clearNumberOnClock(12);
+	  else
+		  clearNumberOnClock(second / 5);
+
+	  second++;
+	  if (second == 60){
+		  second = 0;
+		  minute++;
+	  }
+
+	  if (minute == 60){
+		  minute = 0;
+		  hour++;
+	  }
+
+	  if (hour == 13){
+		  hour = 1;
+	  }
+
+	  setNumberOnClock(hour);
+	  if (minute / 5 == 0)
+		  setNumberOnClock(12);
+	  else
+		  setNumberOnClock(minute / 5);
+
+	  if (second / 5 == 0)
+		  setNumberOnClock(12);
+	  else
+		  setNumberOnClock(second / 5);
+
+	  HAL_Delay(100);
 
     /* USER CODE END WHILE */
 
