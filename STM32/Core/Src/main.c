@@ -94,9 +94,9 @@ int main(void)
 		HAL_GPIO_WritePin(GPIOA, GPIO_Pins[num - 1], GPIO_PIN_SET);
 	}
 
-	int hour = 10;
-	int minute = 50;
-	int second = 46;
+	int hour = 11;
+	int minute = 30;
+	int second = 0;
 	int isInit = 0;
 
   /* USER CODE END 1 */
@@ -169,7 +169,7 @@ int main(void)
 	  else
 		  setNumberOnClock(second / 5);
 
-	  HAL_Delay(100);
+	  HAL_Delay(10);
 
     /* USER CODE END WHILE */
 
