@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "timer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,9 +95,13 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  setTimer1(100);
   while (1)
   {
-
+	  if (timer1_flag == 1){
+		  setTimer1(100);
+			HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+	  }
 
     /* USER CODE END WHILE */
 
@@ -315,13 +319,12 @@ void update7SEG (int index) {
 	}
 }
 
-int counterLED = 100;
 int counter7LED = 25;
 int firstInit = 0;
 
 void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim)
 {
-	counterLED--;
+	timerRun();
 	counter7LED--;
 
 	if (firstInit == 0){
@@ -339,11 +342,6 @@ void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim)
 			index_led = 0;
 		}
 		update7SEG(index_led++);
-	}
-
-	if(counterLED <= 0) {
-		counterLED = 100;
-		HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
 	}
 }
 
