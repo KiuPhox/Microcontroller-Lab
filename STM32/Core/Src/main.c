@@ -294,7 +294,6 @@ void display7SEG(int counter){
 
 void update7SEG (int index) {
 	switch (index) {
-	//ASDSAD
 		case 0:
 			HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_RESET);
