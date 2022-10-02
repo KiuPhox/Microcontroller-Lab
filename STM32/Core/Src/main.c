@@ -62,14 +62,14 @@ int led_buffer [4] = {1 , 2 , 3 , 4};
 
 const int MAX_LED_MATRIX = 8;
 int index_led_matrix = 0;
-uint8_t matrix_buffer[8] = {0x18, 0x3c, 0x66 , 0x66, 0x7e, 0x7e, 0x66, 0x66};
+uint8_t matrix_buffer[8] = {0x00,0x10,0x30,0x7f,0x7f,0x30,0x10,0x00};
 uint16_t row[8] = {ROW0_Pin, ROW1_Pin, ROW2_Pin, ROW3_Pin, ROW4_Pin, ROW5_Pin, ROW6_Pin, ROW7_Pin};
 uint16_t col[8] = {ENM0_Pin, ENM1_Pin, ENM2_Pin, ENM3_Pin, ENM4_Pin, ENM5_Pin, ENM6_Pin, ENM7_Pin};
 
 void displayLEDMatrix(uint8_t byte){
 	for (int i = 0; i < MAX_LED_MATRIX; i++){
-		HAL_GPIO_WritePin(GPIOA, col[i], 1 - (1 & byte));
-		byte = byte >> 1;
+		HAL_GPIO_WritePin(GPIOA, col[i], 1 - (byte >> 7));
+		byte = byte << 1;
 	}
 }
 
@@ -243,9 +243,9 @@ int main(void)
 			}
 
 			for (int i = 0; i < MAX_LED_MATRIX; i++){
-				uint8_t last_bit = 1 & matrix_buffer[i];
-				matrix_buffer[i] = matrix_buffer[i] >> 1;
-				matrix_buffer[i] = matrix_buffer[i] | (last_bit << 7);
+				uint8_t last_bit = 1 & matrix_buffer[i] >> 7;
+				matrix_buffer[i] = matrix_buffer[i] << 1;
+				matrix_buffer[i] = matrix_buffer[i] | last_bit;
 			}
 			update7SEG(index_led++);
 		}
