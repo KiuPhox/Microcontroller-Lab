@@ -6,6 +6,8 @@
  */
 
 #include "timer.h"
+#include "input_reading.h"
+#include "main.h"
 
 int timer0_counter = 0;
 int timer0_flag = 0;
