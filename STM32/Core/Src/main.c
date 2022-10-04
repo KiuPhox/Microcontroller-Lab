@@ -62,7 +62,7 @@ int led_buffer [4] = {1 , 2 , 3 , 4};
 
 const int MAX_LED_MATRIX = 8;
 int index_led_matrix = 0;
-uint8_t matrix_buffer[8] = {0x00,0x10,0x30,0x7f,0x7f,0x30,0x10,0x00};
+uint8_t matrix_buffer[8] = {0x7e,0xfe,0x8e,0x8e,0xfe,0x7e,0x7e,0x66};
 uint16_t row[8] = {ROW0_Pin, ROW1_Pin, ROW2_Pin, ROW3_Pin, ROW4_Pin, ROW5_Pin, ROW6_Pin, ROW7_Pin};
 uint16_t col[8] = {ENM0_Pin, ENM1_Pin, ENM2_Pin, ENM3_Pin, ENM4_Pin, ENM5_Pin, ENM6_Pin, ENM7_Pin};
 
