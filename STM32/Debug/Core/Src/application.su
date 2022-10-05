@@ -1,0 +1,2 @@
+application.c:12:6:fsm_for_mode	4	static
+application.c:25:6:changeModeState	8	static

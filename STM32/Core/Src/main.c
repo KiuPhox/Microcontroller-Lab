@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "timer.h"
 #include "input_processing.h"
+#include "application.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,7 +58,9 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int counter = 0;
+int redDuration = 5;
+int yellowDuration = 2;
+int greenDuration = 3;
 
 void display7SEG(int counter){
 	HAL_GPIO_WritePin (A_SIDE_GPIO_Port, A_SIDE_Pin, GPIO_PIN_RESET);
@@ -151,18 +154,10 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  setTimer0(1000);
 	while (1)
 	{
 		fsm_for_input_processing();
-		if (timer0_flag == 1){
-			setTimer0(1000);
-			counter--;
-			if (counter < 0){
-				counter = 0;
-			}
-			display7SEG(counter);
-		}
+		fsm_for_mode();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
