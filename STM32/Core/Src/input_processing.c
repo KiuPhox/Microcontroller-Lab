@@ -21,6 +21,11 @@ void fsm_for_input_processing(void){
 				if (is_button_pressed(i)){
 					if (i == 0){
 						changeModeState();
+					}else if (i == 1){
+						changeCounterValue(1);
+					}
+					else if (i == 2){
+						changeCounterValue(-1);
 					}
 					buttonStates[i] = BUTTON_PRESSED;
 				}

@@ -82,6 +82,12 @@ void Error_Handler(void);
 #define LED0_GPIO_Port GPIOA
 #define LED1_Pin GPIO_PIN_9
 #define LED1_GPIO_Port GPIOA
+#define EN0_Pin GPIO_PIN_10
+#define EN0_GPIO_Port GPIOA
+#define EN1_Pin GPIO_PIN_11
+#define EN1_GPIO_Port GPIOA
+#define EN2_Pin GPIO_PIN_12
+#define EN2_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

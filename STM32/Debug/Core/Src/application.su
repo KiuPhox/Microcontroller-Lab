@@ -1,3 +1,4 @@
-application.c:13:6:fsm_for_mode	8	static
-application.c:32:6:fsm_for_led	4	static
-application.c:36:6:changeModeState	8	static
+application.c:19:6:fsm_for_mode	8	static
+application.c:41:6:changeModeState	4	static
+application.c:48:6:changeCounterValue	16	static
+application.c:67:6:validateCounterValue	16	static

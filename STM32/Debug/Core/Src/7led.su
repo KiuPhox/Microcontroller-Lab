@@ -1,0 +1,3 @@
+7led.c:14:6:update7SEG	16	static
+7led.c:34:6:display7SEG	16	static
+7led.c:88:6:autoDisplay7Led	8	static
