@@ -1,4 +1,9 @@
-application.c:19:6:fsm_for_mode	8	static
-application.c:41:6:changeModeState	4	static
-application.c:48:6:changeCounterValue	16	static
-application.c:67:6:validateCounterValue	16	static
+application.c:23:6:turnMainRedLed	8	static
+application.c:27:6:turnMainYellowLed	8	static
+application.c:31:6:turnMainGreenLed	8	static
+application.c:36:6:fsm_for_traffic	8	static
+application.c:62:6:fsm_for_mode	8	static
+application.c:83:6:resetTrafficLed	8	static
+application.c:91:6:changeModeState	8	static
+application.c:99:6:validateCounterValue	16	static
+application.c:108:6:changeCounterValue	16	static
