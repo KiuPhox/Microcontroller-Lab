@@ -302,7 +302,6 @@ void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim)
 	}
 
 	if(counter7LED <= 0) {
-// DASD
 		counter7LED = 50;
 		if (HAL_GPIO_ReadPin(EN0_GPIO_Port, EN0_Pin) == GPIO_PIN_RESET){
 			display7SEG(2);
