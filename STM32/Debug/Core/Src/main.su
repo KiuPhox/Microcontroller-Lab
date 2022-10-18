@@ -1,5 +1,4 @@
-main.c:69:6:displayLEDMatrix	24	static
-main.c:76:6:updateLEDMatrix	24	static
+main.c:70:6:updateLEDMatrix	32	static
 main.c:84:6:updateClockBuffer	4	static
 main.c:91:6:display7SEG	16	static
 main.c:144:6:update7SEG	16	static

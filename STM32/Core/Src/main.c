@@ -66,19 +66,19 @@ uint8_t matrix_buffer[8] = {0x7e,0xfe,0x8e,0x8e,0xfe,0x7e,0x7e,0x66};
 uint16_t row[8] = {ROW0_Pin, ROW1_Pin, ROW2_Pin, ROW3_Pin, ROW4_Pin, ROW5_Pin, ROW6_Pin, ROW7_Pin};
 uint16_t col[8] = {ENM0_Pin, ENM1_Pin, ENM2_Pin, ENM3_Pin, ENM4_Pin, ENM5_Pin, ENM6_Pin, ENM7_Pin};
 
-void displayLEDMatrix(uint8_t byte){
-	for (int i = 0; i < MAX_LED_MATRIX; i++){
-		HAL_GPIO_WritePin(GPIOA, col[i], 1 - (byte >> 7));
-		byte = byte << 1;
-	}
-}
 
 void updateLEDMatrix (int index) {
 	for (int i = 0; i < MAX_LED_MATRIX; i++){
 		HAL_GPIO_WritePin(GPIOB, row[i], 1);
 	}
 	HAL_GPIO_WritePin(GPIOB, row[index], 0);
-	displayLEDMatrix(matrix_buffer[index]);
+
+	uint8_t byte = matrix_buffer[index];
+
+	for (int i = 0; i < MAX_LED_MATRIX; i++){
+		HAL_GPIO_WritePin(GPIOA, col[i], 1 - (byte >> 7));
+		byte = byte << 1;
+	}
 }
 
 void updateClockBuffer(){
