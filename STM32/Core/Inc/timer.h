@@ -8,15 +8,11 @@
 #ifndef INC_TIMER_H_
 #define INC_TIMER_H_
 
-extern int timer0_flag;
-extern int timer1_flag;
-extern int timer2_flag;
-extern int timer3_flag;
+#define MAX_TIMER 8
 
-void setTimer0(int duration);
-void setTimer1(int duration);
-void setTimer2(int duration);
-void setTimer3(int duration);
+extern int timer_flag[];
+
+void setTimer(int index, int duration);
 void timerRun();
 
 

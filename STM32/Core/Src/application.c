@@ -18,45 +18,81 @@ int redCounter = 5;
 int yellowCounter = 3;
 int greenCounter = 2;
 
-int ledDisplay;
+int modeLedDisplay;
 
 void turnMainRedLed(void){
-	HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(MAIN0_GPIO_Port, MAIN0_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(MAIN1_GPIO_Port, MAIN1_Pin, GPIO_PIN_RESET);
 }
 void turnMainYellowLed(void){
-	HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(MAIN0_GPIO_Port, MAIN0_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(MAIN1_GPIO_Port, MAIN1_Pin, GPIO_PIN_SET);
 }
 void turnMainGreenLed(void){
-	HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(MAIN0_GPIO_Port, MAIN0_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(MAIN1_GPIO_Port, MAIN1_Pin, GPIO_PIN_SET);
+}
+
+void turnSideRedLed(void){
+	HAL_GPIO_WritePin(SIDE0_GPIO_Port, SIDE0_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(SIDE1_GPIO_Port, SIDE1_Pin, GPIO_PIN_RESET);
+}
+void turnSideYellowLed(void){
+	HAL_GPIO_WritePin(SIDE0_GPIO_Port, SIDE0_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(SIDE1_GPIO_Port, SIDE1_Pin, GPIO_PIN_SET);
+}
+void turnSideGreenLed(void){
+	HAL_GPIO_WritePin(SIDE0_GPIO_Port, SIDE0_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(SIDE1_GPIO_Port, SIDE1_Pin, GPIO_PIN_SET);
 }
 
 void fsm_for_traffic(){
 	switch (trafficMainState){
 			case RED:
 				turnMainRedLed();
-				if (timer1_flag == 1){
+				if (timer_flag[1] == 1){
 					trafficMainState = GREEN;
-					setTimer1(greenCounter * 1000);
+					setTimer(1, greenCounter * 1000);
 				}
 				break;
 			case YELLOW:
 				turnMainYellowLed();
-				if (timer1_flag == 1){
+				if (timer_flag[1] == 1){
 					trafficMainState = RED;
-					setTimer1(redCounter * 1000);
+					setTimer(1, redCounter * 1000);
 				}
 				break;
 			case GREEN:
 				turnMainGreenLed();
-				if (timer1_flag == 1){
+				if (timer_flag[1] == 1){
 					trafficMainState = YELLOW;
-					setTimer1(yellowCounter * 1000);
+					setTimer(1, yellowCounter * 1000);
 				}
 				break;
 		}
+	switch (trafficSideState){
+				case RED:
+					turnSideRedLed();
+					if (timer_flag[2] == 1){
+						trafficSideState = GREEN;
+						setTimer(2, greenCounter * 1000);
+					}
+					break;
+				case YELLOW:
+					turnSideYellowLed();
+					if (timer_flag[2] == 1){
+						trafficSideState = RED;
+						setTimer(2, redCounter * 1000);
+					}
+					break;
+				case GREEN:
+					turnSideGreenLed();
+					if (timer_flag[2] == 1){
+						trafficSideState = YELLOW;
+						setTimer(2, yellowCounter * 1000);
+					}
+					break;
+			}
 }
 
 void fsm_for_mode(void){
@@ -66,23 +102,26 @@ void fsm_for_mode(void){
 			break;
 		case RED_MODE:
 			turnMainRedLed();
-			ledDisplay = redCounter;
+			turnSideRedLed();
+			modeLedDisplay = redCounter;
 			break;
 		case YELLOW_MODE:
 			turnMainYellowLed();
-			ledDisplay = yellowCounter;
+			turnSideYellowLed();
+			modeLedDisplay = yellowCounter;
 			break;
 		case GREEN_MODE:
 			turnMainGreenLed();
-			ledDisplay = greenCounter;
+			turnSideGreenLed();
+			modeLedDisplay = greenCounter;
 			break;
 	}
 }
 
 
 void resetTrafficLed(void){
-	setTimer1(redCounter * 1000);
-	setTimer2(greenCounter * 1000);
+	setTimer(1, redCounter * 1000);
+	setTimer(2, greenCounter * 1000);
 	trafficMainState = RED;
 	trafficSideState = GREEN;
 }

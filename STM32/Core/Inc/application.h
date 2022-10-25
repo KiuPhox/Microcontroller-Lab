@@ -11,7 +11,7 @@
 extern enum ModeState{NORMAL, RED, YELLOW, GREEN};
 extern enum ModeState modeState;
 
-extern int ledDisplay;
+extern int modeLedDisplay;
 
 void changeModeState(void);
 void changeCounterValue(int value);
