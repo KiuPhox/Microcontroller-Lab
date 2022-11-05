@@ -8,6 +8,6 @@
 #ifndef INC_7LED_H_
 #define INC_7LED_H_
 
-void autoDisplay7Led(void);
+void display7SEG(int counter);
 
 #endif /* INC_7LED_H_ */

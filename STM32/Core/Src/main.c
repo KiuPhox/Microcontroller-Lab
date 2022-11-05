@@ -24,7 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "timer.h"
 #include "input_processing.h"
-#include "application.h"
+#include "input_reading.h"
 #include "7led.h"
 /* USER CODE END Includes */
 
@@ -100,12 +100,12 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  setTimer(0, 500);
+  	setTimer(0, 1000);
+  	setTimer(2, 5000);
 	while (1)
 	{
-		autoDisplay7Led();
-		fsm_for_input_processing();
-		fsm_for_mode();
+		fsm_simple_buttons_run();
+		led_red_blinking();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -207,19 +207,13 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, A_SIDE_Pin|B_SIDE_Pin|C_SIDE_Pin|D_SIDE_Pin
-                          |E_SIDE_Pin|F_SIDE_Pin|G_SIDE_Pin|MAIN0_Pin
-                          |MAIN1_Pin|EN0_Pin|EN1_Pin|EN2_Pin
-                          |SIDE0_Pin|SIDE1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED_RED_Pin|A_SIDE_Pin|B_SIDE_Pin|C_SIDE_Pin
+                          |D_SIDE_Pin|E_SIDE_Pin|F_SIDE_Pin|G_SIDE_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : A_SIDE_Pin B_SIDE_Pin C_SIDE_Pin D_SIDE_Pin
-                           E_SIDE_Pin F_SIDE_Pin G_SIDE_Pin MAIN0_Pin
-                           MAIN1_Pin EN0_Pin EN1_Pin EN2_Pin
-                           SIDE0_Pin SIDE1_Pin */
-  GPIO_InitStruct.Pin = A_SIDE_Pin|B_SIDE_Pin|C_SIDE_Pin|D_SIDE_Pin
-                          |E_SIDE_Pin|F_SIDE_Pin|G_SIDE_Pin|MAIN0_Pin
-                          |MAIN1_Pin|EN0_Pin|EN1_Pin|EN2_Pin
-                          |SIDE0_Pin|SIDE1_Pin;
+  /*Configure GPIO pins : LED_RED_Pin A_SIDE_Pin B_SIDE_Pin C_SIDE_Pin
+                           D_SIDE_Pin E_SIDE_Pin F_SIDE_Pin G_SIDE_Pin */
+  GPIO_InitStruct.Pin = LED_RED_Pin|A_SIDE_Pin|B_SIDE_Pin|C_SIDE_Pin
+                          |D_SIDE_Pin|E_SIDE_Pin|F_SIDE_Pin|G_SIDE_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

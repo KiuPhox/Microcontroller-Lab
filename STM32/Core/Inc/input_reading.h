@@ -10,4 +10,5 @@
 
 void button_reading(void);
 unsigned int is_button_pressed(int index);
+unsigned int is_button_pressed_3s(int index);
 #endif /* INC_INPUT_READING_H_ */

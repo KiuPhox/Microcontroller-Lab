@@ -8,6 +8,7 @@
 #ifndef INC_INPUT_PROCESSING_H_
 #define INC_INPUT_PROCESSING_H_
 
-void fsm_for_input_processing(void);
+void fsm_simple_buttons_run(void);
+void led_red_blinking(void);
 
 #endif /* INC_INPUT_PROCESSING_H_ */
