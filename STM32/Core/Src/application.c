@@ -19,51 +19,33 @@ int yellowCounter = 3;
 int greenCounter = 2;
 
 int modeLedDisplay;
-
-void turnMainRedLed(void){
-	HAL_GPIO_WritePin(MAIN0_GPIO_Port, MAIN0_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(MAIN1_GPIO_Port, MAIN1_Pin, GPIO_PIN_RESET);
-}
-void turnMainYellowLed(void){
-	HAL_GPIO_WritePin(MAIN0_GPIO_Port, MAIN0_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(MAIN1_GPIO_Port, MAIN1_Pin, GPIO_PIN_SET);
-}
-void turnMainGreenLed(void){
-	HAL_GPIO_WritePin(MAIN0_GPIO_Port, MAIN0_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(MAIN1_GPIO_Port, MAIN1_Pin, GPIO_PIN_SET);
-}
-
-void turnSideRedLed(void){
-	HAL_GPIO_WritePin(SIDE0_GPIO_Port, SIDE0_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(SIDE1_GPIO_Port, SIDE1_Pin, GPIO_PIN_RESET);
-}
-void turnSideYellowLed(void){
-	HAL_GPIO_WritePin(SIDE0_GPIO_Port, SIDE0_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(SIDE1_GPIO_Port, SIDE1_Pin, GPIO_PIN_SET);
-}
-void turnSideGreenLed(void){
-	HAL_GPIO_WritePin(SIDE0_GPIO_Port, SIDE0_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(SIDE1_GPIO_Port, SIDE1_Pin, GPIO_PIN_SET);
-}
+int mainLedDisplay;
+int sideLedDisplay;
 
 void fsm_for_traffic(){
 	switch (trafficMainState){
 			case RED:
-				turnMainRedLed();
+				HAL_GPIO_WritePin(RED0_GPIO_Port, RED0_Pin, RESET);
+				HAL_GPIO_WritePin(YELLOW0_GPIO_Port, YELLOW0_Pin, SET);
+				HAL_GPIO_WritePin(GREEN0_GPIO_Port, GREEN0_Pin, SET);
 				if (timer_flag[1] == 1){
 					trafficMainState = GREEN;
 					setTimer(1, greenCounter * 1000);
 				}
 				break;
 			case YELLOW:
-				turnMainYellowLed();
+				HAL_GPIO_WritePin(RED0_GPIO_Port, RED0_Pin, SET);
+				HAL_GPIO_WritePin(YELLOW0_GPIO_Port, YELLOW0_Pin, RESET);
+				HAL_GPIO_WritePin(GREEN0_GPIO_Port, GREEN0_Pin, SET);
 				if (timer_flag[1] == 1){
 					trafficMainState = RED;
 					setTimer(1, redCounter * 1000);
 				}
 				break;
 			case GREEN:
-				turnMainGreenLed();
+				HAL_GPIO_WritePin(RED0_GPIO_Port, RED0_Pin, SET);
+				HAL_GPIO_WritePin(YELLOW0_GPIO_Port, YELLOW0_Pin, SET);
+				HAL_GPIO_WritePin(GREEN0_GPIO_Port, GREEN0_Pin, RESET);
 				if (timer_flag[1] == 1){
 					trafficMainState = YELLOW;
 					setTimer(1, yellowCounter * 1000);
@@ -72,21 +54,27 @@ void fsm_for_traffic(){
 		}
 	switch (trafficSideState){
 				case RED:
-					turnSideRedLed();
+					HAL_GPIO_WritePin(RED1_GPIO_Port, RED1_Pin, RESET);
+					HAL_GPIO_WritePin(YELLOW1_GPIO_Port, YELLOW1_Pin, SET);
+					HAL_GPIO_WritePin(GREEN1_GPIO_Port, GREEN1_Pin, SET);
 					if (timer_flag[2] == 1){
 						trafficSideState = GREEN;
 						setTimer(2, greenCounter * 1000);
 					}
 					break;
 				case YELLOW:
-					turnSideYellowLed();
+					HAL_GPIO_WritePin(RED1_GPIO_Port, RED1_Pin, SET);
+					HAL_GPIO_WritePin(YELLOW1_GPIO_Port, YELLOW1_Pin, RESET);
+					HAL_GPIO_WritePin(GREEN1_GPIO_Port, GREEN1_Pin, SET);
 					if (timer_flag[2] == 1){
 						trafficSideState = RED;
 						setTimer(2, redCounter * 1000);
 					}
 					break;
 				case GREEN:
-					turnSideGreenLed();
+					HAL_GPIO_WritePin(RED1_GPIO_Port, RED1_Pin, SET);
+					HAL_GPIO_WritePin(YELLOW1_GPIO_Port, YELLOW1_Pin, RESET);
+					HAL_GPIO_WritePin(GREEN1_GPIO_Port, GREEN1_Pin, SET);
 					if (timer_flag[2] == 1){
 						trafficSideState = YELLOW;
 						setTimer(2, yellowCounter * 1000);
@@ -101,18 +89,39 @@ void fsm_for_mode(void){
 			fsm_for_traffic();
 			break;
 		case RED_MODE:
-			turnMainRedLed();
-			turnSideRedLed();
+			if (timer_flag[3] == 1){
+				setTimer(3, 500);
+				HAL_GPIO_TogglePin(RED0_GPIO_Port, RED0_Pin);
+				HAL_GPIO_TogglePin(RED1_GPIO_Port, RED1_Pin);
+				HAL_GPIO_WritePin(YELLOW0_GPIO_Port, YELLOW0_Pin, SET);
+				HAL_GPIO_WritePin(YELLOW1_GPIO_Port, YELLOW1_Pin, SET);
+				HAL_GPIO_WritePin(GREEN0_GPIO_Port, GREEN0_Pin, SET);
+				HAL_GPIO_WritePin(GREEN1_GPIO_Port, GREEN1_Pin, SET);
+			}
 			modeLedDisplay = redCounter;
 			break;
 		case YELLOW_MODE:
-			turnMainYellowLed();
-			turnSideYellowLed();
+			if (timer_flag[3] == 1){
+				setTimer(3, 500);
+				HAL_GPIO_WritePin(RED0_GPIO_Port, RED0_Pin, SET);
+				HAL_GPIO_WritePin(RED1_GPIO_Port, RED1_Pin, SET);
+				HAL_GPIO_TogglePin(YELLOW0_GPIO_Port, YELLOW0_Pin);
+				HAL_GPIO_TogglePin(YELLOW1_GPIO_Port, YELLOW1_Pin);
+				HAL_GPIO_WritePin(GREEN0_GPIO_Port, GREEN0_Pin, SET);
+				HAL_GPIO_WritePin(GREEN1_GPIO_Port, GREEN1_Pin, SET);
+			}
 			modeLedDisplay = yellowCounter;
 			break;
 		case GREEN_MODE:
-			turnMainGreenLed();
-			turnSideGreenLed();
+			if (timer_flag[3] == 1){
+				setTimer(3, 500);
+				HAL_GPIO_WritePin(RED0_GPIO_Port, RED0_Pin, SET);
+				HAL_GPIO_WritePin(RED1_GPIO_Port, RED1_Pin, SET);
+				HAL_GPIO_WritePin(YELLOW0_GPIO_Port, YELLOW0_Pin, SET);
+				HAL_GPIO_WritePin(YELLOW1_GPIO_Port, YELLOW1_Pin, SET);
+				HAL_GPIO_TogglePin(GREEN0_GPIO_Port, GREEN0_Pin);
+				HAL_GPIO_TogglePin(GREEN1_GPIO_Port, GREEN1_Pin);
+			}
 			modeLedDisplay = greenCounter;
 			break;
 	}

@@ -8,7 +8,7 @@
 #include "main.h"
 #include "timer.h"
 
-const int MAX_MODE_LED = 3;
+const int MAX_MODE_LED = 4;
 const int MAX_TRAFFIC_LED = 4;
 int index_mode_led = 0;
 int index_traffic_led = 0;
@@ -70,22 +70,53 @@ void display7SEG(int counter){
 }
 
 void update7SEGMode(int index){
-	switch (index){
-		case 0:
-			HAL_GPIO_WritePin(GPIOA, EN2_Pin, GPIO_PIN_SET);
-			HAL_GPIO_WritePin(GPIOA, EN0_Pin, GPIO_PIN_RESET);
-			display7SEG((int)modeState + 1);
-			break;
-		case 1:
-			HAL_GPIO_WritePin(GPIOA, EN0_Pin, GPIO_PIN_SET);
-			HAL_GPIO_WritePin(GPIOA, EN1_Pin, GPIO_PIN_RESET);
-			display7SEG(modeLedDisplay / 10);
-			break;
-		case 2:
-			HAL_GPIO_WritePin(GPIOA, EN1_Pin, GPIO_PIN_SET);
-			HAL_GPIO_WritePin(GPIOA, EN2_Pin, GPIO_PIN_RESET);
-			display7SEG(modeLedDisplay % 10);
-			break;
+	if ((int)modeState != 0){
+		switch (index){
+			case 0:
+				HAL_GPIO_WritePin(GPIOA, EN3_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(GPIOA, EN0_Pin, GPIO_PIN_RESET);
+				display7SEG(0);
+				break;
+			case 1:
+				HAL_GPIO_WritePin(GPIOA, EN0_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(GPIOA, EN1_Pin, GPIO_PIN_RESET);
+				display7SEG((int)modeState + 1);
+				break;
+			case 2:
+				HAL_GPIO_WritePin(GPIOA, EN1_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(GPIOA, EN2_Pin, GPIO_PIN_RESET);
+				display7SEG(modeLedDisplay / 10);
+				break;
+			case 3:
+				HAL_GPIO_WritePin(GPIOA, EN2_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(GPIOA, EN3_Pin, GPIO_PIN_RESET);
+				display7SEG(modeLedDisplay % 10);
+				break;
+		}
+	}
+	else{
+		switch (index){
+			case 0:
+				HAL_GPIO_WritePin(GPIOA, EN3_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(GPIOA, EN0_Pin, GPIO_PIN_RESET);
+				display7SEG(timer_counter[1] / 1000);
+				break;
+			case 1:
+				HAL_GPIO_WritePin(GPIOA, EN0_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(GPIOA, EN1_Pin, GPIO_PIN_RESET);
+				display7SEG(timer_counter[1] / 100 % 10);
+				break;
+			case 2:
+				HAL_GPIO_WritePin(GPIOA, EN1_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(GPIOA, EN2_Pin, GPIO_PIN_RESET);
+				display7SEG(timer_counter[2] / 1000);
+				break;
+			case 3:
+				HAL_GPIO_WritePin(GPIOA, EN2_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(GPIOA, EN3_Pin, GPIO_PIN_RESET);
+				display7SEG(timer_counter[2] / 100 % 10);
+				break;
+		}
 	}
 }
 
