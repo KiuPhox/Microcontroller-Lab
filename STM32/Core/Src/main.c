@@ -266,42 +266,42 @@ void SCH_Init(void){
 }
 
 void SCH_Update(void){
-	unsigned char Index;
-
-	for (Index = 0; Index < SCH_MAX_TASKS; Index++){
-		if (SCH_tasks_G[Index].pTask){
-			if (SCH_tasks_G[Index].Delay == 0){
-				SCH_tasks_G[Index].RunMe ++ 1;
-				if (SCH_tasks_G[Index].Period){
-					SCH_tasks_G[Index].Delay = SCH_tasks_G[Index].Period;
-				}
-			}else{
-				SCH_tasks_G[Index].Delay--;
-			}
+	for(int i = 0; i < current_index_task; i++){
+		if (SCH_tasks_G[i].Delay > 0){
+			SCH_tasks_G[i].Delay --;
+		}else{
+			SCH_tasks_G[i].Delay = SCH_tasks_G[i].Period;
+			SCH_tasks_G[i].RunMe += 1;
 		}
 	}
 }
 
-unsigned char SCH_Add_Task(void ( *pFunction)(), unsigned int DELAY, unsigned int PERIOD){
-	unsigned char Index = 0;
+void SCH_Add_Task ( void (*pFunction)() , uint32_t DELAY, uint32_t PERIOD){
+	if(current_index_task < SCH_MAX_TASKS){
 
-	while ((SCH_tasks_G[Index].pTask != 0) && (Index < SCH_MAX_TASKS)){
-		Index ++;
-	}
+		SCH_tasks_G[current_index_task].pTask = pFunction;
+		SCH_tasks_G[current_index_task].Delay = DELAY;
+		SCH_tasks_G[current_index_task].Period =  PERIOD;
+		SCH_tasks_G[current_index_task].RunMe = 0;
 
-	if(Index == SCH_MAX_TASKS){
-		Error_code_G = ERROR_SCH_TOO_MANY_TASKS;
-		return SCH_MAX_TASKS;
+		SCH_tasks_G[current_index_task].TaskID = current_index_task;
+
+
+		current_index_task++;
 	}
-	SCH_tasks_G[Index].pTask = pFunction;
-	SCH_tasks_G[Index].Delay = DELAY;
-	SCH_tasks_G[Index].Period = PERIOD;
-	SCH_tasks_G[Index].RunMe = 0;
-	return Index;
 }
 
-void SCH_Go_To_Sleep(){
+void SCH_Dispatch_Tasks(void){
+	for(int i = 0; i < current_index_task; i++){
+		if(SCH_tasks_G[i].RunMe > 0){
+			SCH_tasks_G[i].RunMe--;
+			(*SCH_tasks_G[i].pTask)();
+		}
+	}
+}
 
+void led1test(){
+	HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
 }
 
 
