@@ -101,13 +101,10 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  setTimer(0, 500);
-  setTimer(3, 500);
+
 	while (1)
 	{
-		autoDisplay7Led();
-		fsm_for_input_processing();
-		fsm_for_mode();
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
