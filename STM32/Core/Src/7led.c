@@ -4,7 +4,6 @@
  *  Created on: Oct 13, 2022
  *      Author: KiuPhox
  */
-#include "application.h"
 #include "main.h"
 #include "timer.h"
 
@@ -68,68 +67,5 @@ void display7SEG(int counter){
 			break;
 	}
 }
-
-void update7SEGMode(int index){
-	if ((int)modeState != 0){
-		switch (index){
-			case 0:
-				HAL_GPIO_WritePin(GPIOA, EN3_Pin, GPIO_PIN_SET);
-				HAL_GPIO_WritePin(GPIOA, EN0_Pin, GPIO_PIN_RESET);
-				display7SEG(0);
-				break;
-			case 1:
-				HAL_GPIO_WritePin(GPIOA, EN0_Pin, GPIO_PIN_SET);
-				HAL_GPIO_WritePin(GPIOA, EN1_Pin, GPIO_PIN_RESET);
-				display7SEG((int)modeState + 1);
-				break;
-			case 2:
-				HAL_GPIO_WritePin(GPIOA, EN1_Pin, GPIO_PIN_SET);
-				HAL_GPIO_WritePin(GPIOA, EN2_Pin, GPIO_PIN_RESET);
-				display7SEG(modeLedDisplay / 10);
-				break;
-			case 3:
-				HAL_GPIO_WritePin(GPIOA, EN2_Pin, GPIO_PIN_SET);
-				HAL_GPIO_WritePin(GPIOA, EN3_Pin, GPIO_PIN_RESET);
-				display7SEG(modeLedDisplay % 10);
-				break;
-		}
-	}
-	else{
-		switch (index){
-			case 0:
-				HAL_GPIO_WritePin(GPIOA, EN3_Pin, GPIO_PIN_SET);
-				HAL_GPIO_WritePin(GPIOA, EN0_Pin, GPIO_PIN_RESET);
-				display7SEG(timer_counter[1] / 1000);
-				break;
-			case 1:
-				HAL_GPIO_WritePin(GPIOA, EN0_Pin, GPIO_PIN_SET);
-				HAL_GPIO_WritePin(GPIOA, EN1_Pin, GPIO_PIN_RESET);
-				display7SEG(timer_counter[1] / 100 % 10);
-				break;
-			case 2:
-				HAL_GPIO_WritePin(GPIOA, EN1_Pin, GPIO_PIN_SET);
-				HAL_GPIO_WritePin(GPIOA, EN2_Pin, GPIO_PIN_RESET);
-				display7SEG(timer_counter[2] / 1000);
-				break;
-			case 3:
-				HAL_GPIO_WritePin(GPIOA, EN2_Pin, GPIO_PIN_SET);
-				HAL_GPIO_WritePin(GPIOA, EN3_Pin, GPIO_PIN_RESET);
-				display7SEG(timer_counter[2] / 100 % 10);
-				break;
-		}
-	}
-}
-
-void autoDisplay7Led(void){
-	if (timer_flag[0] == 1){
-		setTimer(0, 100);
-		index_mode_led++;
-		if (index_mode_led == MAX_MODE_LED){
-			index_mode_led = 0;
-		}
-		update7SEGMode(index_mode_led);
-	}
-}
-
 
 

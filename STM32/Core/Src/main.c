@@ -25,7 +25,6 @@
 #include "timer.h"
 #include "input_processing.h"
 #include "input_reading.h"
-#include "application.h"
 #include "7led.h"
 /* USER CODE END Includes */
 
@@ -243,9 +242,73 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+typedef struct {
+	void ( *pTask)(void);
+	uint32_t Delay;
+	uint32_t Period;
+	uint8_t RunMe;
+	uint32_t TaskID;
+} sTask;
+
+#define SCH_MAX_TASKS 40
+#define NO_TASK_ID 0
+sTask SCH_tasks_G[SCH_MAX_TASKS];
+
+void SCH_Init(void){
+	unsigned char i;
+	for (i = 0; i < SCH_MAX_TASKS; i++) {
+		SCH_Delete_Task(i);
+	}
+
+	Error_code_G = 0;
+	Timer_init();
+	Watchdog_init();
+}
+
+void SCH_Update(void){
+	unsigned char Index;
+
+	for (Index = 0; Index < SCH_MAX_TASKS; Index++){
+		if (SCH_tasks_G[Index].pTask){
+			if (SCH_tasks_G[Index].Delay == 0){
+				SCH_tasks_G[Index].RunMe ++ 1;
+				if (SCH_tasks_G[Index].Period){
+					SCH_tasks_G[Index].Delay = SCH_tasks_G[Index].Period;
+				}
+			}else{
+				SCH_tasks_G[Index].Delay--;
+			}
+		}
+	}
+}
+
+unsigned char SCH_Add_Task(void ( *pFunction)(), unsigned int DELAY, unsigned int PERIOD){
+	unsigned char Index = 0;
+
+	while ((SCH_tasks_G[Index].pTask != 0) && (Index < SCH_MAX_TASKS)){
+		Index ++;
+	}
+
+	if(Index == SCH_MAX_TASKS){
+		Error_code_G = ERROR_SCH_TOO_MANY_TASKS;
+		return SCH_MAX_TASKS;
+	}
+	SCH_tasks_G[Index].pTask = pFunction;
+	SCH_tasks_G[Index].Delay = DELAY;
+	SCH_tasks_G[Index].Period = PERIOD;
+	SCH_tasks_G[Index].RunMe = 0;
+	return Index;
+}
+
+void SCH_Go_To_Sleep(){
+
+}
+
+
 
 void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim)
 {
+	SCH_Update();
 	timerRun();
 	button_reading();
 }

@@ -7,7 +7,6 @@
 
 #include "main.h"
 #include "input_reading.h"
-#include "application.h"
 
 #define NO_OF_BUTTONS 3
 
