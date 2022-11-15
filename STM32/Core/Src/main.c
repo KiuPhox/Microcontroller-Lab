@@ -59,7 +59,84 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void Led1Test(){
+	HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+}
+void Led2Test(){
+	HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
+}
+void Led3Test(){
+	HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
+}
+void Led4Test(){
+	HAL_GPIO_TogglePin(LED4_GPIO_Port, LED4_Pin);
+}
+void Led5Test(){
+	HAL_GPIO_TogglePin(LED5_GPIO_Port, LED5_Pin);
+}
 
+typedef struct {
+	void ( *pTask)(void);
+	uint32_t Delay;
+	uint32_t Period;
+	uint8_t RunMe;
+	uint32_t TaskID;
+} sTask;
+
+#define SCH_MAX_TASKS 5
+#define NO_TASK_ID 0
+sTask SCH_tasks_G[SCH_MAX_TASKS];
+int current_index_task;
+
+
+
+void SCH_Update(void){
+	for(int i = 0; i < current_index_task; i++){
+		if (SCH_tasks_G[i].Delay > 0){
+			SCH_tasks_G[i].Delay --;
+		}else{
+			SCH_tasks_G[i].Delay = SCH_tasks_G[i].Period;
+			SCH_tasks_G[i].RunMe += 1;
+		}
+	}
+}
+
+void SCH_Add_Task (void (*pFunction)(), uint32_t DELAY, uint32_t PERIOD){
+	if(current_index_task < SCH_MAX_TASKS){
+
+		SCH_tasks_G[current_index_task].pTask = pFunction;
+		SCH_tasks_G[current_index_task].Delay = DELAY;
+		SCH_tasks_G[current_index_task].Period =  PERIOD;
+		SCH_tasks_G[current_index_task].RunMe = 0;
+
+		SCH_tasks_G[current_index_task].TaskID = current_index_task;
+
+		current_index_task++;
+	}
+}
+
+void SCH_Dispatch_Tasks(void){
+	for(int i = 0; i < current_index_task; i++){
+		if(SCH_tasks_G[i].RunMe > 0){
+			SCH_tasks_G[i].RunMe--;
+			(*SCH_tasks_G[i].pTask)();
+		}
+	}
+}
+
+void SCH_Delete_Task(uint32_t taskID){
+	SCH_tasks_G[taskID].pTask = 0x0000;
+	SCH_tasks_G[taskID].Delay = 0;
+	SCH_tasks_G[taskID].Period =  0;
+	SCH_tasks_G[taskID].RunMe = 0;
+}
+
+void SCH_Init(void){
+	current_index_task = 0;
+	for (int i = 0; i < SCH_MAX_TASKS; i++){
+		SCH_Delete_Task(i);
+	}
+}
 
 
 /* USER CODE END 0 */
@@ -100,10 +177,16 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  	SCH_Init();
+  	SCH_Add_Task(Led1Test, 500, 50);
+  	SCH_Add_Task(Led2Test, 600, 100);
+  	SCH_Add_Task(Led3Test, 700, 150);
+  	SCH_Add_Task(Led4Test, 800, 200);
+  	SCH_Add_Task(Led5Test, 900, 150);
 
 	while (1)
 	{
-
+		SCH_Dispatch_Tasks();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -202,115 +285,33 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, A_SIDE_Pin|B_SIDE_Pin|C_SIDE_Pin|D_SIDE_Pin
-                          |E_SIDE_Pin|F_SIDE_Pin|G_SIDE_Pin|EN0_Pin
-                          |EN1_Pin|EN2_Pin|EN3_Pin|RED0_Pin
-                          |YELLOW0_Pin|GREEN0_Pin|RED1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin
+                          |LED5_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, YELLOW1_Pin|GREEN1_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pins : A_SIDE_Pin B_SIDE_Pin C_SIDE_Pin D_SIDE_Pin
-                           E_SIDE_Pin F_SIDE_Pin G_SIDE_Pin EN0_Pin
-                           EN1_Pin EN2_Pin EN3_Pin RED0_Pin
-                           YELLOW0_Pin GREEN0_Pin RED1_Pin */
-  GPIO_InitStruct.Pin = A_SIDE_Pin|B_SIDE_Pin|C_SIDE_Pin|D_SIDE_Pin
-                          |E_SIDE_Pin|F_SIDE_Pin|G_SIDE_Pin|EN0_Pin
-                          |EN1_Pin|EN2_Pin|EN3_Pin|RED0_Pin
-                          |YELLOW0_Pin|GREEN0_Pin|RED1_Pin;
+  /*Configure GPIO pins : LED1_Pin LED2_Pin LED3_Pin LED4_Pin
+                           LED5_Pin */
+  GPIO_InitStruct.Pin = LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin
+                          |LED5_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : BUTTON_1_Pin BUTTON_2_Pin BUTTON_3_Pin */
-  GPIO_InitStruct.Pin = BUTTON_1_Pin|BUTTON_2_Pin|BUTTON_3_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : YELLOW1_Pin GREEN1_Pin */
-  GPIO_InitStruct.Pin = YELLOW1_Pin|GREEN1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
 }
 
 /* USER CODE BEGIN 4 */
-typedef struct {
-	void ( *pTask)(void);
-	uint32_t Delay;
-	uint32_t Period;
-	uint8_t RunMe;
-	uint32_t TaskID;
-} sTask;
-
-#define SCH_MAX_TASKS 40
-#define NO_TASK_ID 0
-sTask SCH_tasks_G[SCH_MAX_TASKS];
-
-void SCH_Init(void){
-	unsigned char i;
-	for (i = 0; i < SCH_MAX_TASKS; i++) {
-		SCH_Delete_Task(i);
-	}
-
-	Error_code_G = 0;
-	Timer_init();
-	Watchdog_init();
-}
-
-void SCH_Update(void){
-	for(int i = 0; i < current_index_task; i++){
-		if (SCH_tasks_G[i].Delay > 0){
-			SCH_tasks_G[i].Delay --;
-		}else{
-			SCH_tasks_G[i].Delay = SCH_tasks_G[i].Period;
-			SCH_tasks_G[i].RunMe += 1;
-		}
-	}
-}
-
-void SCH_Add_Task ( void (*pFunction)() , uint32_t DELAY, uint32_t PERIOD){
-	if(current_index_task < SCH_MAX_TASKS){
-
-		SCH_tasks_G[current_index_task].pTask = pFunction;
-		SCH_tasks_G[current_index_task].Delay = DELAY;
-		SCH_tasks_G[current_index_task].Period =  PERIOD;
-		SCH_tasks_G[current_index_task].RunMe = 0;
-
-		SCH_tasks_G[current_index_task].TaskID = current_index_task;
 
 
-		current_index_task++;
-	}
-}
-
-void SCH_Dispatch_Tasks(void){
-	for(int i = 0; i < current_index_task; i++){
-		if(SCH_tasks_G[i].RunMe > 0){
-			SCH_tasks_G[i].RunMe--;
-			(*SCH_tasks_G[i].pTask)();
-		}
-	}
-}
-
-void led1test(){
-	HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
-}
 
 
 
 void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim)
 {
 	SCH_Update();
-	timerRun();
-	button_reading();
+	//timerRun();
+	//button_reading();
 }
 
 

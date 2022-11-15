@@ -13,7 +13,7 @@ int index_mode_led = 0;
 int index_traffic_led = 0;
 
 
-
+/*
 void display7SEG(int counter){
 	HAL_GPIO_WritePin (A_SIDE_GPIO_Port, A_SIDE_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin (B_SIDE_GPIO_Port, B_SIDE_Pin, GPIO_PIN_RESET);
@@ -66,6 +66,6 @@ void display7SEG(int counter){
 			HAL_GPIO_WritePin (G_SIDE_GPIO_Port, G_SIDE_Pin, GPIO_PIN_SET);
 			break;
 	}
-}
+}*/
 
 

@@ -4,6 +4,7 @@
  *  Created on: Oct 4, 2022
  *      Author: KiuPhox
  */
+/*
 #include "main.h"
 #define NO_OF_BUTTONS 3
 
@@ -30,4 +31,4 @@ unsigned int is_button_pressed(int index){
 	if (index >= NO_OF_BUTTONS)
 		return 0;
 	return (buttonBuffer[index] == BUTTON_IS_PRESSED);
-}
+}*/

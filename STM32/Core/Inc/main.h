@@ -58,46 +58,16 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define A_SIDE_Pin GPIO_PIN_1
-#define A_SIDE_GPIO_Port GPIOA
-#define B_SIDE_Pin GPIO_PIN_2
-#define B_SIDE_GPIO_Port GPIOA
-#define C_SIDE_Pin GPIO_PIN_3
-#define C_SIDE_GPIO_Port GPIOA
-#define D_SIDE_Pin GPIO_PIN_4
-#define D_SIDE_GPIO_Port GPIOA
-#define E_SIDE_Pin GPIO_PIN_5
-#define E_SIDE_GPIO_Port GPIOA
-#define F_SIDE_Pin GPIO_PIN_6
-#define F_SIDE_GPIO_Port GPIOA
-#define G_SIDE_Pin GPIO_PIN_7
-#define G_SIDE_GPIO_Port GPIOA
-#define BUTTON_1_Pin GPIO_PIN_0
-#define BUTTON_1_GPIO_Port GPIOB
-#define BUTTON_2_Pin GPIO_PIN_1
-#define BUTTON_2_GPIO_Port GPIOB
-#define BUTTON_3_Pin GPIO_PIN_2
-#define BUTTON_3_GPIO_Port GPIOB
-#define EN0_Pin GPIO_PIN_8
-#define EN0_GPIO_Port GPIOA
-#define EN1_Pin GPIO_PIN_9
-#define EN1_GPIO_Port GPIOA
-#define EN2_Pin GPIO_PIN_10
-#define EN2_GPIO_Port GPIOA
-#define EN3_Pin GPIO_PIN_11
-#define EN3_GPIO_Port GPIOA
-#define RED0_Pin GPIO_PIN_12
-#define RED0_GPIO_Port GPIOA
-#define YELLOW0_Pin GPIO_PIN_13
-#define YELLOW0_GPIO_Port GPIOA
-#define GREEN0_Pin GPIO_PIN_14
-#define GREEN0_GPIO_Port GPIOA
-#define RED1_Pin GPIO_PIN_15
-#define RED1_GPIO_Port GPIOA
-#define YELLOW1_Pin GPIO_PIN_3
-#define YELLOW1_GPIO_Port GPIOB
-#define GREEN1_Pin GPIO_PIN_4
-#define GREEN1_GPIO_Port GPIOB
+#define LED1_Pin GPIO_PIN_5
+#define LED1_GPIO_Port GPIOA
+#define LED2_Pin GPIO_PIN_6
+#define LED2_GPIO_Port GPIOA
+#define LED3_Pin GPIO_PIN_7
+#define LED3_GPIO_Port GPIOA
+#define LED4_Pin GPIO_PIN_8
+#define LED4_GPIO_Port GPIOA
+#define LED5_Pin GPIO_PIN_9
+#define LED5_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
