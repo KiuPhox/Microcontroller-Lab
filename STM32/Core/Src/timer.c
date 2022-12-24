@@ -6,7 +6,6 @@
  */
 
 #include "timer.h"
-#include "input_reading.h"
 #include "main.h"
 
 int TIMER_CYCLE = 10;
