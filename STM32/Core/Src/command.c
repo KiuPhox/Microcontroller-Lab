@@ -30,7 +30,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef * huart){
 }
 
 enum state_parser{COMMAND_START, COMMAND_END};
-enum state_parser currentState = COMMAND_START;
+enum state_parser currentState = COMMAND_END;
 
 char command[30];
 unsigned char command_index = 0;
@@ -39,20 +39,20 @@ unsigned char command_done = 0;
 void command_parser_fsm(){
 	switch(currentState){
 	case COMMAND_START:
-		if(buffer[index_buffer - 1] == '!'){
-			currentState = COMMAND_END;
-			command_index = 0;
-		}
-		break;
-	case COMMAND_END:
 		if(buffer[index_buffer-1] == '#'){
-			currentState = COMMAND_START;
+			currentState = COMMAND_END;
 			command[command_index] = '\0';
 			command_done = 1;
 		}
 		else{
 			command[command_index++] =  buffer[index_buffer - 1];
 			if(command_index >= MAX_BUFFER_SIZE) command_index = 0;
+		}
+		break;
+	case COMMAND_END:
+		if(buffer[index_buffer - 1] == '!'){
+			currentState = COMMAND_START;
+			command_index = 0;
 		}
 		break;
 	default:
