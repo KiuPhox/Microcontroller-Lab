@@ -13,12 +13,11 @@
 #include <stdio.h>
 #include <string.h>
 
+extern char command[30];
 extern unsigned char command_index;
 extern unsigned char command_done;
 
+
 void command_parser_fsm();
-char* getCommand();
-void clearCommand();
-unsigned char status();
 
 #endif /* INC_COMMAND_H_ */
